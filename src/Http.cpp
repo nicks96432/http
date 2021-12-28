@@ -307,7 +307,7 @@ namespace phase2
         if (result.ec == std::errc::result_out_of_range)
         {
 #ifndef NDEBUG
-            log_debug << "invalid HTTP response: statuc code too big";
+            log_debug << "invalid HTTP response: status code too big";
 #endif
             this->_valid = false;
             return;
@@ -315,7 +315,7 @@ namespace phase2
         if (result.ptr != str.begin() + second_space)
         {
 #ifndef NDEBUG
-            log_debug << "invalid HTTP response: invalid statuc code";
+            log_debug << "invalid HTTP response: invalid status code";
 #endif
             this->_valid = false;
             return;

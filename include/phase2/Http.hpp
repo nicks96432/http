@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <filesystem>
 #include <functional>
 #include <optional>
 #include <ostream>
@@ -224,7 +225,7 @@ namespace phase2
          *
          * @return the URL of the HTTP request.
          */
-        std::string getUrl() const noexcept;
+        std::filesystem::path getUrl() const noexcept;
 
         /**
          * @brief Set the type of the request.
@@ -249,7 +250,7 @@ namespace phase2
 
     protected:
         RequestType _type;
-        std::string _url;
+        std::filesystem::path _url;
     };
 
     /**

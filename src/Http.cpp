@@ -2,6 +2,7 @@
 #include <charconv>
 #include <cstdint>
 #include <cstring>
+#include <filesystem>
 #include <functional>
 #include <list>
 #include <optional>
@@ -223,7 +224,7 @@ namespace phase2
         return this->_type;
     }
 
-    std::string HttpRequestHeader::getUrl() const noexcept
+    std::filesystem::path HttpRequestHeader::getUrl() const noexcept
     {
         return this->_url;
     }

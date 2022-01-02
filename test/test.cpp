@@ -1,8 +1,10 @@
+#include <filesystem>
 #include <iostream>
 
 #include <phase2/Http.hpp>
+#include <phase2/Mime.hpp>
 
-int main(void)
+int main(int argc, char const *argv[])
 {
     using namespace phase2;
 
@@ -24,22 +26,19 @@ int main(void)
     if (!request1 || body_start != 221)
         std::cerr << "HttpRequestHeader test1 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpRequestHeader test1 success\n\n"
-                  << request1;
+        std::cerr << "HttpRequestHeader test1 success\n";
 
     HttpRequestHeader request2 = HttpRequestHeader{request1.serialize(), body_start};
     if (!request2 || request1 != request2 || body_start != 221)
         std::cerr << "HttpRequestHeader test2 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpRequestHeader test2 success\n\n"
-                  << request2;
+        std::cerr << "HttpRequestHeader test2 success\n";
 
     HttpRequestHeader request3{"GET /starburst_stream HTTP/1.1\r\n\r\n", body_start};
     if (!request3 || body_start != 34)
         std::cerr << "HttpRequestHeader test3 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpRequestHeader test3 success\n\n"
-                  << request3;
+        std::cerr << "HttpRequestHeader test3 success\n";
 
     HttpResponseHeader response1{
         "HTTP/1.1 200 OK\r\n"
@@ -53,22 +52,26 @@ int main(void)
     if (!response1 || body_start != 96)
         std::cerr << "HttpResponseHeader test1 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpResponseHeader test1 success\n\n"
-                  << response1;
+        std::cerr << "HttpResponseHeader test1 success\n";
 
     HttpResponseHeader response2{response1.serialize(), body_start};
     if (!response2 || response1 != response2 || body_start != 96)
         std::cerr << "HttpResponseHeader test2 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpResponseHeader test2 success\n\n"
-                  << response2;
+        std::cerr << "HttpResponseHeader test2 success\n";
 
     HttpResponseHeader response3{"HTTP/1.1 404 Not Found\r\n\r\n", body_start};
     if (!response3 || body_start != 26)
         std::cerr << "HttpResponseHeader test3 failed, body_start = " << body_start << "\n";
     else
-        std::cerr << "HttpResponseHeader test3 success\n\n"
-                  << response3;
+        std::cerr << "HttpResponseHeader test3 success\n";
+
+    std::string mime = get_mime(argv[0]);
+    if (mime.compare("application/x-pie-executable") != 0)
+        std::cerr << "get_mime test failed\n";
+    else
+        std::cerr << "get_mime test success\n";
+    
 
     return 0;
 }

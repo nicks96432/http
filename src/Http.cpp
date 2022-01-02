@@ -117,8 +117,8 @@ namespace phase2
     void HttpHeader::setHttpVersion(HttpHeader::HttpVersionType &&version) noexcept
     {
         this->_version = std::move(version);
-        if (version.first > 0 && version.second >= 0 ||
-            version.first == 0 && version.second > 0)
+        if ((version.first > 0 && version.second >= 0) ||
+            (version.first == 0 && version.second > 0))
             this->_valid = true;
         else
             this->_valid = false;
@@ -128,7 +128,7 @@ namespace phase2
     {
         this->_version.first  = major;
         this->_version.second = minor;
-        if (major > 0 && minor >= 0 || major == 0 && minor > 0)
+        if ((major > 0 && minor >= 0) || (major == 0 && minor > 0))
             this->_valid = true;
         else
             this->_valid = false;

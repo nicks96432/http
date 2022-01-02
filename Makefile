@@ -1,5 +1,5 @@
 TARGET       := libhttp.a
-TEST_TARGETS := test_http
+TEST_TARGETS := test
 
 SRC_DIR      := ./src
 BUILD_DIR    := ./build
@@ -15,6 +15,7 @@ TEST_OBJS    := $(TEST_SRCS:%=$(BUILD_DIR)/%.o)
 INC_FLAGS    := $(addprefix -I, $(INC_DIR))
 CPPFLAGS     := $(INC_FLAGS)
 CXXFLAGS     := -std=c++17
+LDFLAGS      := -lmagic
 
 all: SRCS := $(filter-out ./src/utils/Log.cpp, $(SRCS))
 all: OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
@@ -31,7 +32,7 @@ $(BUILD_DIR)/$(TARGET): $(OBJS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/test/$(TEST_TARGETS): $(TEST_OBJS) $(BUILD_DIR)/$(TARGET)
 	$(CXX) $(LDFLAGS) $? -o $@

@@ -370,12 +370,14 @@ namespace phase2
                            std::optional<std::reference_wrapper<std::size_t>> body_start = {}) noexcept;
 
         /**
-         * @brief Get the status of the response.
+         * @brief Get the status code of the response.
          */
         StatusCode getStatus() const noexcept;
 
         /**
-         * @brief Set the status of the response.
+         * @brief Set the status code of the response.
+         * 
+         * @param status the new status code.
          */
         void setStatus(StatusCode status) noexcept;
 

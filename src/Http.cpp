@@ -111,18 +111,27 @@ namespace phase2
 
     void HttpHeader::setHttpVersion(const HttpHeader::HttpVersionType &version) noexcept
     {
-        this->_version = version;
+        this->setHttpVersion(version.first, version.second);
     }
 
     void HttpHeader::setHttpVersion(HttpHeader::HttpVersionType &&version) noexcept
     {
         this->_version = std::move(version);
+        if (version.first > 0 && version.second >= 0 ||
+            version.first == 0 && version.second > 0)
+            this->_valid = true;
+        else
+            this->_valid = false;
     }
 
     void HttpHeader::setHttpVersion(int major, int minor) noexcept
     {
         this->_version.first  = major;
         this->_version.second = minor;
+        if (major > 0 && minor >= 0 || major == 0 && minor > 0)
+            this->_valid = true;
+        else
+            this->_valid = false;
     }
 
     HttpHeader::BufferType HttpHeader::serialize() const noexcept
@@ -192,6 +201,14 @@ namespace phase2
             return;
         }
         this->_type = phase2::to_type(str.substr(0, first_space));
+        if (this->_type == HttpRequestHeader::RequestType::UNKNOWN)
+        {
+#ifndef NDEBUG
+            log_debug << "invalid HTTP request: unknown request type";
+#endif
+            this->_valid = false;
+            return;
+        }
         str.remove_prefix(first_space + 1);
 
         std::string_view::size_type second_space = str.find(' ');
@@ -232,6 +249,10 @@ namespace phase2
     void HttpRequestHeader::setType(HttpRequestHeader::RequestType type) noexcept
     {
         this->_type = type;
+        if (type == HttpRequestHeader::RequestType::UNKNOWN)
+            this->_valid = false;
+        else
+            this->_valid = true;
     }
 
     void HttpRequestHeader::setUrl(std::string_view url) noexcept
@@ -342,6 +363,10 @@ namespace phase2
     void HttpResponseHeader::setStatus(HttpResponseHeader::StatusCode status) noexcept
     {
         this->_status = status;
+        if (status == HttpResponseHeader::StatusCode::unknown)
+            this->_valid = false;
+        else
+            this->_valid = true;
     }
 
     HttpResponseHeader::BufferType HttpResponseHeader::serialize() const noexcept

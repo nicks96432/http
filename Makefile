@@ -22,8 +22,8 @@ all: OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 all: CXXFLAGS += -O3 -DNDEBUG
 all: $(BUILD_DIR)/$(TARGET)
 
-debug: CXXFLAGS += -O0 -ggdb -Wall -fsanitize=undefined -fsanitize=address
-debug: LDFLAGS += -fsanitize=undefined -fsanitize=address
+debug: CXXFLAGS += -g -Wall
+debug: LDFLAGS += -fsanitize=undefined
 debug: $(BUILD_DIR)/$(TARGET)
 debug: $(BUILD_DIR)/test/$(TEST_TARGETS)
 

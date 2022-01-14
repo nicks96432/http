@@ -12,7 +12,7 @@
 namespace phase2
 {
 
-    // clang-format off
+	// clang-format off
 	/**
 	 * @brief Convert the binary file extension to its MIME type.
 	 * 
@@ -225,65 +225,65 @@ namespace phase2
 
 		return "";
     }
-    // clang-format on
+	// clang-format on
 
-    std::string get_mime(const std::filesystem::path &path)
-    {
-        ::magic_t cookie = ::magic_open(MAGIC_MIME_TYPE);
-        if (cookie == nullptr)
-        {
+	std::string get_mime(const std::filesystem::path &path)
+	{
+		::magic_t cookie = ::magic_open(MAGIC_MIME_TYPE);
+		if (cookie == nullptr)
+		{
 #ifndef NDEBUG
-            log_error << "get_mime: unable to initialize magic library";
+			log_error << "get_mime: unable to initialize magic library";
 #endif
-            return "";
-        }
+			return "";
+		}
 
-        if (::magic_load(cookie, nullptr) < 0)
-        {
+		if (::magic_load(cookie, nullptr) < 0)
+		{
 #ifndef NDEBUG
-            log_error << "get_mime: unable to load default magic database";
+			log_error << "get_mime: unable to load default magic database";
 #endif
-            ::magic_close(cookie);
-            return "";
-        }
+			::magic_close(cookie);
+			return "";
+		}
 
-        const char *result = ::magic_file(cookie, path.c_str());
-        if (result == nullptr)
-        {
+		const char *result = ::magic_file(cookie, path.c_str());
+		if (result == nullptr)
+		{
 #ifndef NDEBUG
-            log_error << "get_mime: result is NULL";
+			log_error << "get_mime: result is NULL";
 #endif
-            ::magic_close(cookie);
-            return "";
-        }
+			::magic_close(cookie);
+			return "";
+		}
 
-        std::string result_str = result;
-        ::magic_close(cookie);
+		std::string result_str = result;
+		::magic_close(cookie);
 
-        if (path.has_extension())
-        {
-            std::string_view extension{path.extension().string()};
-            extension.remove_prefix(1);
-            std::string result2;
-            if (result_str == "application/octet-stream")
-            {
+		if (path.has_extension())
+		{
+			std::string_view extension{path.extension().string()};
+			extension.remove_prefix(1);
+			std::string result2;
+			if (result_str == "application/octet-stream")
+			{
 #ifndef NDEBUG
-                log_debug << "get_mime: result is unknown binary form, start second decision by extension";
+				log_debug << "get_mime: result is unknown binary form, start second decision by extension";
 #endif
-                result2 = _check_binary_mime(extension);
-            }
-            else if (result_str == "text/plain")
-            {
+				result2 = _check_binary_mime(extension);
+			}
+			else if (result_str == "text/plain")
+			{
 #ifndef NDEBUG
-                log_debug << "get_mime: result is unknown text form, start second decision by extension";
+				log_debug << "get_mime: result is unknown text form, start second decision by extension";
 #endif
-                result2 = _check_text_mime(extension);
-            }
-            if (!result2.empty())
-                result_str = std::move(result2);
-        }
+				result2 = _check_text_mime(extension);
+			}
+			if (!result2.empty())
+				result_str = std::move(result2);
+		}
 
-        return result_str;
-    }
+		return result_str;
+	}
 
 } // namespace phase2
